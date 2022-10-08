@@ -173,12 +173,21 @@ namespace UEExplorer
                     "Engine.Actor.Components:ObjectProperty",
                     "Engine.Actor.Skins:ObjectProperty",
                     "Engine.Material.Expressions:ObjectProperty",
+                    "Engine.ParticleLODLevel.Modules:ObjectProperty",
+                    "Engine.ParticleSpriteEmitter.LODLevels:ObjectProperty",
                     "Engine.ParticleSystem.Emitters:ObjectProperty",
                     "Engine.SequenceAction.Targets:ObjectProperty",
                     "Engine.SequenceOp.InputLinks:StructProperty",
                     "Engine.SequenceOp.OutputLinks:StructProperty",
                     "Engine.SequenceOp.VariableLinks:StructProperty",
                     "Engine.SkeletalMeshComponent.AnimSets:ObjectProperty",
+                    "Engine.RB_BodySetup.AggGeom.ConvexElems:StructProperty",
+                    "Engine.RB_BodySetup.AggGeom.ConvexElems.EdgeDirections:Vector",
+                    "Engine.RB_BodySetup.AggGeom.ConvexElems.FaceNormalDirections:Vector",
+                    "Engine.RB_BodySetup.AggGeom.ConvexElems.FacePlaneData:Vector4",
+                    "Engine.RB_BodySetup.AggGeom.ConvexElems.FaceTriData:IntProperty",
+                    "Engine.RB_BodySetup.AggGeom.ConvexElems.PermutedVertexData:Vector4",
+                    "Engine.RB_BodySetup.AggGeom.ConvexElems.VertexData:Vector",
                     "XInterface.GUIComponent.Controls:ObjectProperty"
                 };
 
