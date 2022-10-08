@@ -181,13 +181,13 @@ namespace UEExplorer
                     "Engine.SequenceOp.OutputLinks:StructProperty",
                     "Engine.SequenceOp.VariableLinks:StructProperty",
                     "Engine.SkeletalMeshComponent.AnimSets:ObjectProperty",
-                    "Engine.RB_BodySetup.AggGeom.ConvexElems:StructProperty",
-                    "Engine.RB_BodySetup.AggGeom.ConvexElems.EdgeDirections:Vector",
-                    "Engine.RB_BodySetup.AggGeom.ConvexElems.FaceNormalDirections:Vector",
-                    "Engine.RB_BodySetup.AggGeom.ConvexElems.FacePlaneData:Vector4",
-                    "Engine.RB_BodySetup.AggGeom.ConvexElems.FaceTriData:IntProperty",
-                    "Engine.RB_BodySetup.AggGeom.ConvexElems.PermutedVertexData:Vector4",
-                    "Engine.RB_BodySetup.AggGeom.ConvexElems.VertexData:Vector",
+                    "Engine.RB_BodySetup.ConvexElems:StructProperty",
+                    "Engine.RB_BodySetup.EdgeDirections:Vector",
+                    "Engine.RB_BodySetup.FaceNormalDirections:Vector",
+                    "Engine.RB_BodySetup.FacePlaneData:Vector4",
+                    "Engine.RB_BodySetup.FaceTriData:IntProperty",
+                    "Engine.RB_BodySetup.PermutedVertexData:Vector4",
+                    "Engine.RB_BodySetup.VertexData:Vector",
                     "XInterface.GUIComponent.Controls:ObjectProperty"
                 };
 
