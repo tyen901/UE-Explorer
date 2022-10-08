@@ -170,16 +170,16 @@ namespace UEExplorer
             {
                 Options.VariableTypes = new List<string>
                 {
-                    "Engine.Actor.Skins:ObjectProperty",
                     "Engine.Actor.Components:ObjectProperty",
-                    "Engine.SkeletalMeshComponent.AnimSets:ObjectProperty",
+                    "Engine.Actor.Skins:ObjectProperty",
+                    "Engine.Material.Expressions:ObjectProperty",
+                    "Engine.ParticleSystem.Emitters:ObjectProperty",
+                    "Engine.SequenceAction.Targets:ObjectProperty",
                     "Engine.SequenceOp.InputLinks:StructProperty",
                     "Engine.SequenceOp.OutputLinks:StructProperty",
                     "Engine.SequenceOp.VariableLinks:StructProperty",
-                    "Engine.SequenceAction.Targets:ObjectProperty",
-                    "XInterface.GUIComponent.Controls:ObjectProperty",
-                    "Engine.Material.Expressions:ObjectProperty",
-                    "Engine.ParticleSystem.Emitters:ObjectProperty"
+                    "Engine.SkeletalMeshComponent.AnimSets:ObjectProperty",
+                    "XInterface.GUIComponent.Controls:ObjectProperty"
                 };
 
             }
