@@ -54,25 +54,51 @@ namespace UEExplorer
             var exportPath = package.InitializeExportDirectory();
             package.NTLPackage = new NativesTablePackage();
             package.NTLPackage.LoadPackage( Path.Combine( Application.StartupPath, "Native Tables", Program.Options.NTLPath ) );
-            foreach( UClass uClass in package.Objects.Where( o => o is UClass && o.ExportTable != null ) )
+            foreach (var uClass in package.Objects.Where(o => o.ExportTable != null))
             {
                 try
                 {
-                    var exportContent = exportScripts && uClass.ScriptText != null
-                        ? uClass.ScriptText.Decompile()
-                        : uClass.Decompile();
+                    // Skip if the class is not a material
+                    if (uClass.ExportTable.ClassName != "Material")
+                        continue;
+                    
+                    // Get path
+                    string fullPath = package.FullPackageName;
+                    
+                    // Strip off everything before CookedPC
+                    int index = fullPath.IndexOf("CookedPC", StringComparison.Ordinal);
+                    string packagePath = fullPath.Substring(index);
+                    
+                    // Remove the filename
+                    packagePath = packagePath.Substring(0, packagePath.LastIndexOf('\\'));
+                    
+                    string packageName = uClass.Package.PackageName;
+                    string outerName = uClass.Outer.Name;
+                
+                    string outputDirectoryPathFull = Path.Combine("D:\\ME\\", packagePath, packageName, outerName);
+                
+                    Directory.CreateDirectory(outputDirectoryPathFull);
 
+                    string fileName = Path.Combine(outputDirectoryPathFull, uClass.Name) +
+                                      UnrealExtensions.UnrealCodeExt;
+                    
+                    if (File.Exists(fileName))
+                        File.Delete(fileName);
+                    
+                    var exportContent = uClass.Decompile();
+                    
                     File.WriteAllText(
-                        Path.Combine( exportPath, uClass.Name ) + UnrealExtensions.UnrealCodeExt,
+                        fileName,
                         exportContent,
                         Encoding.ASCII
                     );
                 }
                 catch( Exception e )
                 {
-                    Console.WriteLine( "Couldn't decompile object " + uClass + "\r\n" + e );
+                    Console.WriteLine("Couldn't decompile object " + uClass + "\r\n" + e );
                 }
             }
+            
             package.CreateUPKGFile( exportPath );
             return exportPath;
         }
