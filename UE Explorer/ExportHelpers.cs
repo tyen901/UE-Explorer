@@ -58,8 +58,16 @@ namespace UEExplorer
             {
                 try
                 {
+                    string[] validClasses = new[]
+                    {
+                        "Material",
+                        "MaterialInstanceConstant",
+                        "StaticMesh",
+                        "Texture2D",
+                    };
+                    
                     // Skip if the class is not a material
-                    if (uClass.ExportTable.ClassName != "Material")
+                    if (validClasses.Contains(uClass.ExportTable.ClassName) == false)
                         continue;
                     
                     // Get path
@@ -75,12 +83,21 @@ namespace UEExplorer
                     string packageName = uClass.Package.PackageName;
                     string outerName = uClass.Outer.Name;
                 
-                    string outputDirectoryPathFull = Path.Combine("D:\\ME\\", packagePath, packageName, outerName);
+                    string outputDirectoryPathFull = Path.Combine(
+                        "D:\\ME\\output",
+                        // uClass.ExportTable.ClassName,
+                        packagePath,
+                        packageName,
+                        outerName
+                        );
                 
                     Directory.CreateDirectory(outputDirectoryPathFull);
 
+                    string extension = uClass.ExportTable.ClassName;
+
                     string fileName = Path.Combine(outputDirectoryPathFull, uClass.Name) +
-                                      UnrealExtensions.UnrealCodeExt;
+                                      "." + extension;
+                                      // UnrealExtensions.UnrealCodeExt;
                     
                     if (File.Exists(fileName))
                         File.Delete(fileName);
