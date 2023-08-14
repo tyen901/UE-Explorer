@@ -950,7 +950,8 @@ namespace UEExplorer.UI.Tabs
 
         private void DoExportPackageClasses( bool exportScripts = false )
         {
-            var exportPath = _UnrealPackage.ExportPackageClasses( exportScripts );
+            var outputDirectory = _UnrealPackage.InitializeExportDirectory();
+            var exportPath = _UnrealPackage.ExportPackageClasses(outputDirectory, exportScripts );
             var dialogResult = MessageBox.Show( 
                 String.Format( 
                     Resources.EXPORTED_ALL_PACKAGE_CLASSES, 

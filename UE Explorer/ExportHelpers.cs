@@ -48,7 +48,7 @@ namespace UEExplorer
             );
         }
 
-        public static string ExportPackageClasses( this UnrealPackage package, bool exportScripts = false )
+        public static string ExportPackageClasses( this UnrealPackage package, string outputDirectory, bool exportScripts = false )
         {
             Program.LoadConfig();
             var exportPath = package.InitializeExportDirectory();
@@ -70,32 +70,32 @@ namespace UEExplorer
                     if (validClasses.Contains(uClass.ExportTable.ClassName) == false)
                         continue;
                     
-                    // Get path
-                    string fullPath = package.FullPackageName;
+                    if (package.FullPackageName.Contains("CookedPC"))
+                    {
+                        string fullPath = package.FullPackageName;
+                        int index = fullPath.IndexOf("CookedPC", StringComparison.Ordinal);
+                        string packagePath = fullPath.Substring(index);
+                        packagePath = packagePath.Substring(0, packagePath.LastIndexOf('\\'));
+                        outputDirectory = Path.Combine(outputDirectory, packagePath);
+                    }
                     
-                    // Strip off everything before CookedPC
-                    int index = fullPath.IndexOf("CookedPC", StringComparison.Ordinal);
-                    string packagePath = fullPath.Substring(index);
-                    
-                    // Remove the filename
-                    packagePath = packagePath.Substring(0, packagePath.LastIndexOf('\\'));
-                    
-                    string packageName = uClass.Package.PackageName;
-                    string outerName = uClass.Outer.Name;
+                    if (uClass.Package != null)
+                    {
+                        string packageName = uClass.Package.PackageName;
+                        outputDirectory = Path.Combine(outputDirectory, packageName);
+                    }
+                        
+                    if (uClass.Outer != null)
+                    {
+                        string outerName = uClass.Outer.Name;
+                        outputDirectory = Path.Combine(outputDirectory, outerName);
+                    }
                 
-                    string outputDirectoryPathFull = Path.Combine(
-                        "D:\\ME\\output",
-                        // uClass.ExportTable.ClassName,
-                        packagePath,
-                        packageName,
-                        outerName
-                        );
-                
-                    Directory.CreateDirectory(outputDirectoryPathFull);
+                    Directory.CreateDirectory(outputDirectory);
 
                     string extension = uClass.ExportTable.ClassName;
 
-                    string fileName = Path.Combine(outputDirectoryPathFull, uClass.Name) +
+                    string fileName = Path.Combine(outputDirectory, uClass.Name) +
                                       "." + extension;
                                       // UnrealExtensions.UnrealCodeExt;
                     
@@ -109,6 +109,22 @@ namespace UEExplorer
                         exportContent,
                         Encoding.ASCII
                     );
+
+                    var buffer = uClass.Buffer;
+                    
+                    // Write buffer to file
+                    if (buffer != null)
+                    {
+                        string bufferFileName = fileName + ".bin";
+                        
+                        if (File.Exists(bufferFileName))
+                            File.Delete(bufferFileName);
+                        
+                        File.WriteAllBytes(
+                            bufferFileName,
+                            buffer.GetBuffer()
+                        );
+                    }
                 }
                 catch( Exception e )
                 {
