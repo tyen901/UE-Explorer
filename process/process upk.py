@@ -13,11 +13,9 @@ def process_upk_file(upk_file, exe_path):
     command = f'"{exe_path}" "{upk_file}" -console -silent -export=classes'
     subprocess.run(command, shell=True)
 
-def process_upk_files_multithreaded(upk_files, exe_path, batch_size=10):
-    with ThreadPoolExecutor() as executor:
-        for i in range(0, len(upk_files), batch_size):
-            batch = upk_files[i:i + batch_size]
-            executor.map(process_upk_file, batch, [exe_path] * len(batch))
+def process_upk_files_multithreaded(upk_files, exe_path, max_workers=10):
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        executor.map(process_upk_file, upk_files, [exe_path] * len(upk_files))
 
 if __name__ == '__main__':
     folder = "D:/Mirror's Edge/TdGame"
