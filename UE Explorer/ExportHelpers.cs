@@ -48,7 +48,7 @@ namespace UEExplorer
             );
         }
 
-        public static string ExportPackageClasses( this UnrealPackage package, bool exportScripts = false )
+        public static string ExportPackageClasses( this UnrealPackage package, string outputDirectory, bool exportScripts = false )
         {
             Program.LoadConfig();
             var exportPath = package.InitializeExportDirectory();
@@ -58,29 +58,46 @@ namespace UEExplorer
             {
                 try
                 {
+                    string[] validClasses = new[]
+                    {
+                        "Material",
+                        "MaterialInstanceConstant",
+                        "StaticMesh",
+                        "Texture2D",
+                    };
+                    
                     // Skip if the class is not a material
-                    if (uClass.ExportTable.ClassName != "Material")
+                    if (validClasses.Contains(uClass.ExportTable.ClassName) == false)
                         continue;
                     
-                    // Get path
-                    string fullPath = package.FullPackageName;
+                    if (package.FullPackageName.Contains("CookedPC"))
+                    {
+                        string fullPath = package.FullPackageName;
+                        int index = fullPath.IndexOf("CookedPC", StringComparison.Ordinal);
+                        string packagePath = fullPath.Substring(index);
+                        packagePath = packagePath.Substring(0, packagePath.LastIndexOf('\\'));
+                        outputDirectory = Path.Combine(outputDirectory, packagePath);
+                    }
                     
-                    // Strip off everything before CookedPC
-                    int index = fullPath.IndexOf("CookedPC", StringComparison.Ordinal);
-                    string packagePath = fullPath.Substring(index);
-                    
-                    // Remove the filename
-                    packagePath = packagePath.Substring(0, packagePath.LastIndexOf('\\'));
-                    
-                    string packageName = uClass.Package.PackageName;
-                    string outerName = uClass.Outer.Name;
+                    if (uClass.Package != null)
+                    {
+                        string packageName = uClass.Package.PackageName;
+                        outputDirectory = Path.Combine(outputDirectory, packageName);
+                    }
+                        
+                    if (uClass.Outer != null)
+                    {
+                        string outerName = uClass.Outer.Name;
+                        outputDirectory = Path.Combine(outputDirectory, outerName);
+                    }
                 
-                    string outputDirectoryPathFull = Path.Combine("D:\\ME\\", packagePath, packageName, outerName);
-                
-                    Directory.CreateDirectory(outputDirectoryPathFull);
+                    Directory.CreateDirectory(outputDirectory);
 
-                    string fileName = Path.Combine(outputDirectoryPathFull, uClass.Name) +
-                                      UnrealExtensions.UnrealCodeExt;
+                    string extension = uClass.ExportTable.ClassName;
+
+                    string fileName = Path.Combine(outputDirectory, uClass.Name) +
+                                      "." + extension;
+                                      // UnrealExtensions.UnrealCodeExt;
                     
                     if (File.Exists(fileName))
                         File.Delete(fileName);
